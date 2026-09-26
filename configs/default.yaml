@@ -1,0 +1,60 @@
+# Scenario definitions consumed by prosthesis_sim.utils.load_config.
+# Each block picks an *arm mode* + a *controller* + a *sensory preset*.
+# Available modes (see src/prosthesis_sim/envs/arm_specs.py):
+#   human_elbow       : biological 2-joint, 6-muscle elbow (baseline)
+#   prosthesis_arm    : myoArm + MPL bionic hand (MyoChallenge-2024 model)
+
+scenarios:
+
+  # ---------------- HUMAN mode ----------------
+  human_elbow_open_loop:
+    controller: scripted
+    controller_kwargs: {hold_steps: 500}
+    env: {mode: human_elbow, add_ball: true, horizon_s: 12.0}
+    sensory: {}
+
+  human_elbow_pd:
+    controller: pd_muscle
+    env: {mode: human_elbow, horizon_s: 6.0}
+    sensory: {}
+
+  human_elbow_deafferented:
+    controller: pd_muscle
+    env: {mode: human_elbow, horizon_s: 6.0}
+    sensory: {proprio_enabled: false}
+
+  # ---------------- FULL PROSTHESIS ARM (MyoChallenge-24 style) ----------------
+  prosthesis_arm_reach_forward:
+    controller: pd_muscle
+    env: {mode: prosthesis_arm, target_pose: reach_forward, horizon_s: 4.0}
+    sensory: {}
+
+  prosthesis_arm_reach_up:
+    controller: pd_muscle
+    env: {mode: prosthesis_arm, target_pose: reach_up, horizon_s: 4.0}
+    sensory: {}
+
+  prosthesis_arm_reach_across:
+    controller: pd_muscle
+    env: {mode: prosthesis_arm, target_pose: reach_across, horizon_s: 4.0}
+    sensory: {}
+
+  prosthesis_arm_reach_side:
+    controller: pd_muscle
+    env: {mode: prosthesis_arm, target_pose: reach_side, horizon_s: 4.0}
+    sensory: {}
+
+  prosthesis_arm_press_button:
+    controller: pd_muscle
+    env: {mode: prosthesis_arm, target_pose: reach_forward, add_button: true, horizon_s: 5.0}
+    sensory: {}
+
+  prosthesis_arm_deafferented:
+    controller: pd_muscle
+    env: {mode: prosthesis_arm, target_pose: reach_forward, horizon_s: 4.0}
+    sensory: {proprio_enabled: false}
+
+  prosthesis_arm_learned:
+    controller: motornet
+    env: {mode: prosthesis_arm, horizon_s: 4.0}
+    sensory: {proprio_enabled: false, vision_delay_ms: 120.0}
